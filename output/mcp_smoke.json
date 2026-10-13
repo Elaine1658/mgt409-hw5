@@ -1,0 +1,5 @@
+[
+  {"prompt":"Check the tee stock and price for ticket 101","tool":"check_stock_and_price","short_output":"CC-TEE-WHITE size S has 0 units; list price is 28.0."},
+  {"prompt":"Check vendor restock constraints for ticket 101","tool":"check_vendor_invoice_and_restock","short_output":"Bulldog Print Co has 5-day lead time; invoice 501 is still open."},
+  {"prompt":"Check rent and cash for ticket 102","tool":"check_lease_and_cash","short_output":"Rent is 2400.0 due 2026-09-02; checking balance is 3400.0."}
+]

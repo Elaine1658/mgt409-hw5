@@ -1,0 +1,31 @@
+{
+  "run": "clean baseline",
+  "tickets": [
+    {
+      "ticket_id": 101,
+      "status": "resolved",
+      "summary": "Resolved by Boss with one specialist handoff; 5 events recorded.",
+      "proposals": []
+    },
+    {
+      "ticket_id": 102,
+      "status": "resolved",
+      "summary": "Resolved by Boss with one specialist handoff; 4 events recorded.",
+      "proposals": [
+        {
+          "kind": "rent",
+          "amount": 2400.0,
+          "ref_id": 1,
+          "reason": "Monthly shop rent"
+        }
+      ]
+    },
+    {
+      "ticket_id": 103,
+      "status": "resolved",
+      "summary": "Resolved by Boss with one specialist handoff; 6 events recorded.",
+      "proposals": []
+    }
+  ],
+  "ending_checking_balance": 3400.0
+}
