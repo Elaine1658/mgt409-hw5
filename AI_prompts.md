@@ -12,6 +12,8 @@ Please inspect `data/campus_customs.db` table by table. I need the fields, a pla
 
 Please build the first version of the FastMCP server in `mcp_server/` and make it read only from `data/campus_customs_new.db`. Start with three clear tools: one for stock and price, one for vendor lead time and unpaid invoices, and one for leases and cash. Keep the tools specific to tickets 101, 102, and 103, and do not invent database facts.
 
+**Follow-up:** Please add a short README that maps each tool to the tables it reads and the ticket it helps. Keep the tool outputs based on the real SQLite data.
+
 ## Problem 4: Add the MCP server and test each tool
 
 Please add this local MCP server to the project configuration in `.mcp.json`. The three tools should be testable through an MCP client, and `output/mcp_smoke.json` should record the prompts, tool names, and short database-backed results. Please keep the saved results consistent with the actual tools in `mcp_server/server.py`.
@@ -28,9 +30,13 @@ Please create `output/desk_tickets.html` with tabs for tickets 101, 102, and 103
 
 Please add FastAPI routes in `backend/main.py` to list tickets, run one ticket, return recent agent events, show checking cash, reset the working database, and approve a prepared payment. A payment must not happen during an agent run; only the human approval route may update cash and payments, and it must reject a negative balance.
 
+**Follow-up:** Please make the payment route return a clear error when the requested amount is larger than the checking balance, and make sure it does not write a payment in that case.
+
 ## Problem 8: Agent dashboard
 
 Please build the React + Vite + TypeScript dashboard in `frontend/`. It should show all three tickets, let me select and run one, display agent messages and MCP tool use, show resolved status and a summary, show checking balance, and provide an approve button when a payment proposal is waiting. Make it look like a real campus operations desk rather than the default Vite page.
+
+**Follow-up:** The dashboard is functional, but it still looks too much like a basic starter page. Please restyle it as a polished campus operations desk with clearer ticket cards, a stronger visual hierarchy, and a more useful activity stream. Keep the approval button easy to find.
 
 ## Problem 9: Resolve the tickets
 
