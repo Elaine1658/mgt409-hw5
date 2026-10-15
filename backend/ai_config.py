@@ -23,4 +23,6 @@ def make_pydantic_agent(system_prompt: str, *, name: str | None = None, output_t
         return None
     provider = OpenAIProvider(base_url=PORTKEY_BASE_URL, api_key=token)
     model = OpenAIChatModel(MODEL_NAME, provider=provider)
-    return Agent(model, name=name, output_type=output_type, deps_type=deps_type, system_prompt=system_prompt)
+    # Portkey's gpt-6-luna function-tool endpoint requires reasoning to be off.
+    return Agent(model, name=name, output_type=output_type, deps_type=deps_type,
+                 model_settings={'openai_reasoning_effort': 'none'}, system_prompt=system_prompt)
