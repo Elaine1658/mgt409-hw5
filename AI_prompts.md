@@ -1,7 +1,5 @@
 # Vibe coder prompt log
 
-These are the prompts I used while building the homework. I wrote them in a casual way because I was explaining the project to the AI step by step and checking the result after each problem.
-
 ## Problem 1: Vibe coder prompts
 
 I want to keep a clear record of the prompts I use for this homework. Please create an `AI_prompts.md` file in the project root. Make one section for each of the 11 problems, and include the problem number and the full problem title. Write the prompts in my own conversational style, like a student explaining what they need help with. Please keep the wording specific enough that someone can understand what I asked the AI to build, inspect, test, or submit. Do not include private keys, copied system instructions, or made-up claims about work that was never requested.
