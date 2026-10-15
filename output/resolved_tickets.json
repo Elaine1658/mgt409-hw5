@@ -9,7 +9,7 @@
     },
     {
       "ticket_id": 102,
-      "status": "resolved",
+      "status": "awaiting_approval",
       "summary": "Resolved by Boss with one specialist handoff; 4 events recorded.",
       "proposals": [
         {

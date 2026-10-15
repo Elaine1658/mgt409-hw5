@@ -1,5 +1,6 @@
 from pathlib import Path
 import sqlite3, json
+import asyncio
 from mcp_server.server import check_stock_and_price, check_vendor_invoice_and_restock, check_lease_and_cash
 from .ai_config import MODEL_NAME
 from .pydantic_team import run_live_ticket
@@ -9,7 +10,7 @@ DB = ROOT / "data" / "campus_customs_new.db"
 PROMPTS = ROOT / "backend" / "prompts"
 
 def run_ticket(ticket_id: int):
-    live_result = run_live_ticket(ticket_id)
+    live_result = asyncio.run(run_live_ticket(ticket_id))
     if live_result is not None:
         with sqlite3.connect(DB) as db:
             db.execute("UPDATE tickets SET status=? WHERE id=?", (live_result['status'], ticket_id)); db.commit()
@@ -41,7 +42,8 @@ def run_ticket(ticket_id: int):
         price=(facts.get("pricing") or [{}])[0]
         if t["type"] == "price_override":
             msg("Accounting",f"List price is ${price.get('list_price',0):.2f}; margin review is required before any discount.")
+    status = 'awaiting_approval' if proposals else 'resolved'
     with sqlite3.connect(DB) as db:
-        db.execute("UPDATE tickets SET status='resolved' WHERE id=?",(ticket_id,)); db.commit()
-    return {"ticket_id":ticket_id,"status":"resolved","events":events,"proposals":proposals,
+        db.execute("UPDATE tickets SET status=? WHERE id=?",(status, ticket_id)); db.commit()
+    return {"ticket_id":ticket_id,"status":status,"events":events,"proposals":proposals,
             "summary":f"Resolved by Boss with one specialist handoff; {len(events)} events recorded."}

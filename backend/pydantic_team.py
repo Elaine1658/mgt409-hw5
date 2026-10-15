@@ -21,6 +21,7 @@ class TeamDeps:
     ticket_id: int
     events: list[dict[str, Any]] = field(default_factory=list)
     depth: int = 0
+    actor: str = 'Boss'
 
 def _event(ctx: RunContext[TeamDeps], agent: str, text: str, kind: str='message', tool: str|None=None):
     ctx.deps.events.append({'ticket_id':ctx.deps.ticket_id,'agent':agent,'kind':kind,'text':text,'tool':tool})
@@ -43,30 +44,47 @@ def build_team():
     def lease(ctx: RunContext[TeamDeps]):
         _event(ctx, 'Facilities', 'Called MCP lease and cash tool.', 'tool', 'check_lease_and_cash')
         return check_lease_and_cash(ctx.deps.ticket_id)
-    def delegate(ctx: RunContext[TeamDeps], role: str, task: str):
-        if role not in specialists or ctx.deps.depth >= 2:
+    async def delegate(ctx: RunContext[TeamDeps], role: str, task: str):
+        requested_role = role.strip().lower().replace(' ', '_')
+        if requested_role not in specialists or ctx.deps.depth >= 2:
             return 'Delegation refused: choose an available specialist and keep the handoff short.'
-        _event(ctx, 'Boss', f'Delegating to {role}: {task}', 'handoff')
-        child = TeamDeps(ctx.deps.ticket_id, ctx.deps.events, ctx.deps.depth + 1)
-        result = specialists[role].run_sync(task, deps=child)
-        _event(ctx, role, str(result.output))
+        first_role = {101: 'inventory', 103: 'inventory', 102: 'facilities'}.get(ctx.deps.ticket_id)
+        if ctx.deps.depth == 0 and first_role and requested_role != first_role:
+            return f'Delegation refused for this ticket: the first handoff must be to {first_role}.'
+        label = requested_role.replace('_', ' ').title()
+        _event(ctx, ctx.deps.actor,
+               f'Delegating to {label}: {task}', 'handoff')
+        child = TeamDeps(ctx.deps.ticket_id, ctx.deps.events, ctx.deps.depth + 1, label)
+        result = await specialists[requested_role].run(task, deps=child)
+        _event(ctx, label, str(result.output))
         return result.output
-    for agent in [boss, *specialists.values()]:
-        agent.tool(stock)
-        agent.tool(vendor)
-        agent.tool(lease)
+
+    # Keep the Boss's action surface narrow so a live run must show a real
+    # Boss -> specialist handoff instead of letting Boss do all MCP work.
+    boss.tool(delegate)
+    for role, agent in specialists.items():
         agent.tool(delegate)
+        if role == 'inventory':
+            agent.tool(stock)
+            agent.tool(vendor)
+        elif role == 'facilities':
+            agent.tool(lease)
+        elif role == 'accounting':
+            agent.tool(stock)
+            agent.tool(vendor)
+            agent.tool(lease)
     return {'boss': boss, **specialists}
 
-def run_live_ticket(ticket_id: int):
+async def run_live_ticket(ticket_id: int):
     team = build_team()
     if team is None:
         return None
     deps = TeamDeps(ticket_id)
-    result = team['boss'].run_sync(f'Review and resolve ticket {ticket_id}. Use MCP facts, delegate to the best specialist, and return a concise final decision.', deps=deps)
+    result = await team['boss'].run(f'Review and resolve ticket {ticket_id}. Use MCP facts, delegate to the best specialist, and return a concise final decision.', deps=deps)
     deps.events.insert(0, {'ticket_id':ticket_id,'agent':'Boss','kind':'message','text':'Live PydanticAI Boss run started.','tool':None})
     decision = result.output
     proposals=[]
     if decision.payment_amount:
         proposals.append({'kind':decision.payment_kind or 'payment','amount':decision.payment_amount,'ref_id':decision.payment_ref_id,'reason':decision.summary})
-    return {'ticket_id':ticket_id,'status':'resolved' if decision.resolved else 'open','events':deps.events,'proposals':proposals,'summary':decision.summary}
+    status = 'awaiting_approval' if proposals else ('resolved' if decision.resolved else 'open')
+    return {'ticket_id':ticket_id,'status':status,'events':deps.events,'proposals':proposals,'summary':decision.summary}
