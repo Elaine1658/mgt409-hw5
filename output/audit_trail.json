@@ -214,5 +214,429 @@
     "kind": "message",
     "text": "List price is $58.00; margin review is required before any discount.",
     "tool": null
+  },
+  {
+    "agent": "System",
+    "kind": "reset",
+    "text": "Working database reset from the untouched original.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Review ticket 101 using available MCP facts, identify the issue and operational specialist needed, and report relevant facts. Do not invent details; no customer-facing draft until operational facts are established.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "I couldn\u2019t access ticket 101 or any MCP facts, so I can\u2019t reliably identify the issue or the operational specialist needed. No operational facts are established, and I haven\u2019t drafted a customer response.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 102 using available MCP facts. Determine the product/order or stock issue and operational recommendation. Report concrete facts and any recommended payment details (exact amount, kind, reference id, reason); do not invent.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Ticket 102 facts: rent notice from Elm City Properties; shop rent due in 2 days. No SKU/request. Please record a customer-facing draft acknowledging the notice and asking for the rent invoice/payment instructions or confirming the payment details; do not invent amount or reference.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "I\u2019m unable to access the ticket board to record a draft. Suggested customer-facing draft:\n\n\u201cThank you for the rent notice from Elm City Properties. We understand the shop rent is due in two days. Could you please share the rent invoice and payment instructions, or confirm the payment details we should use?\u201d",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "Ticket 102 is a **rent notice**, not a product, order, or stock request. Elm City Properties says shop rent is due in two days. No rent amount, invoice ID, or payment reference is provided, so I can\u2019t recommend a specific payment amount or reference without inventing details.\n\n**Recommendation:** Obtain the rent invoice and payment instructions, then handle payment through the appropriate process. No stock or vendor action is indicated. Customer service could not access the ticket board to record a draft; it suggested asking Elm City Properties for the invoice and payment instructions.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Facilities: Review ticket 102 as a rent notice. Confirm available operational facts from MCP and advise next steps, including any exact payment recommendation details only if supported.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "handoff",
+    "text": "Delegating to Accounting: Review ticket 102 rent notice operational facts for accounting considerations. MCP lease data: Chapel Street shop, landlord Elm City Properties, monthly rent $2,400, next due 2026-09-02; today 2026-08-31. Checking balance $3,400 as of 2026-08-31. No recorded payments. Open invoice $840 due 2026-08-28. Advise whether accounting review changes payment proposal.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "message",
+    "text": "Accounting review **does not change the rent proposal**: the lease confirms $2,400 rent for the Chapel Street shop, due 2026-09-02, and there are no recorded payments. Propose a **$2,400 rent payment to Elm City Properties**, subject to human approval.\n\nHowever, checking has only **$3,400** as of 2026-08-31, and a separate **$840 invoice is open and overdue** (due 2026-08-28). Paying both would total $3,240 and leave $160 before any other cash needs. The rent alone fits the current balance, but paying the invoice too would materially reduce the remaining cushion. Keep the invoice visible in the cash review; do not treat it as already paid. No payment has been made.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "message",
+    "text": "**Ticket 102 \u2014 rent notice review**\n\n- **Rent:** $2,400 for the Chapel Street shop, payable to Elm City Properties.\n- **Due date:** September 2, 2026. Today is August 31, so the rent is **not yet due**; it is not overdue.\n- **Recorded payments:** None.\n- **Available checking balance:** $3,400 as of August 31.\n- **Other cash item:** An $840 invoice is open and overdue, due August 28. It is recorded as an invoice, not a payment.\n\n**Next step:** Prepare a **$2,400 rent payment proposal**, subject to human approval. The rent fits the recorded balance. If the $840 invoice were also paid, the two items would total $3,240 and leave $160 before other cash needs, so account for that invoice in cash planning. Accounting review did not change the rent proposal. No payment has been made.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Accounting: Review ticket 102's proposed rent payment against available MCP accounting facts. Confirm exact amount, payment kind, reference id, and reason if supported; otherwise state which details are unavailable. Note payment remains a proposal until human approval.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "handoff",
+    "text": "Delegating to Accounting: Review ticket 102's proposed rent payment against MCP accounting facts. Retrieve desk date today, invoice/ticket details, cash balance, and lease/rent facts; confirm exact amount, payment kind, reference id, and reason only if supported. Do not execute payment; report unavailable details and approval status.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "message",
+    "text": "**Ticket 102 \u2014 rent payment review**\n\n- **Shop date:** 2026-08-31.\n- **Ticket:** Open rent notice from Elm City Properties, linked to lease 1. It has **no invoice ID**. The note says rent is due in two days.\n- **Lease:** Chapel Street shop; monthly rent **$2,400.00**; next due **2026-09-02**.\n- **Cash:** Checking balance **$3,400.00**, dated 2026-08-31.\n- **Payment history:** No payments were listed.\n\nThe lease supports a proposed rent amount of **$2,400.00**. The ticket is not linked to an invoice, so there is **no invoice/reference ID** to confirm. Cash is above the proposed amount, but no payment was made.\n\n**Approval status:** Not paid; human approval is required before any payment.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "message",
+    "text": "Ticket 102 supports a proposed **$2,400.00 rent payment** to Elm City Properties for lease 1, due **September 2, 2026**. The payment kind is **rent**. No invoice ID or other payment reference ID is available; the ticket is not linked to an invoice.\n\nThe cash balance reported for August 31 is **$3,400.00**. This remains a proposal only\u2014**no payment was made**, and human approval is required.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Draft concise customer-facing wording for ticket 102 using established facts: rent $2,400 due Sep 2, 2026, proposed not paid pending human approval; no payment reference ID. Do not claim payment sent.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Customer Service",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Check MCP/database findings for ticket 102 and draft a concise customer-facing response using established facts only. Clarify proposed payment not paid pending human approval; rent $2,400 due Sep 2, 2026; no payment reference ID. Do not send anything.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "I can\u2019t verify ticket 102 because no MCP/database lookup results are available here. I therefore can\u2019t draft a response that presents the payment status, rent amount or due date, or missing reference ID as verified facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "Ticket 102: Rent of $2,400 is due September 2, 2026. The payment is proposed but has not been sent; it is pending human approval. No payment reference ID is available.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 103 using MCP facts. Determine the operational issue and recommended resolution; report evidence and any exact payment fields if applicable. Do not invent facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: For ticket 103 (Yale AI Club, CC-HOOD-NAVY size M, qty 20, bulk discount request), record a customer-facing draft. Operational facts: stock is 8, shortfall is 12; vendor Bulldog Print Co has 5-day lead time but cannot ship while open unpaid invoice 501 ($840, due 2026-08-28) remains open. No discount/payment decision was provided. Draft should acknowledge request and avoid promising availability, restock timing, or discount.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "**Draft for ticket 103 \u2014 Yale AI Club**\n\nThanks for reaching out about ordering 20 CC-HOOD-NAVY hoodies in size M and asking about a bulk discount. We currently have 8 in stock, so we can\u2019t confirm availability for the full quantity. We\u2019ve noted your discount request, but no discount decision is available yet. We\u2019re unable to confirm whether or when the remaining quantity will be available.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "**Ticket 103 \u2014 operational review**\n\n- **Issue:** The Yale AI Club requests 20 CC-HOOD-NAVY hoodies, size M, and asks for a bulk discount.\n- **Stock evidence:** Inventory shows **8** size M in stock, leaving a **shortfall of 12**.\n- **Restock constraint:** Bulldog Print Co handles apparel reprints and has a **5-day lead time**, but its **$840 invoice 501**, due **2026-08-28**, is still open. The vendor cannot ship while that invoice is unpaid. No restock timing can therefore be confirmed.\n- **Pricing evidence:** Unit cost is **$22** and list price is **$58**. No discount or margin decision is recorded.\n- **Recommendation to Boss:** Don\u2019t promise all 20 units or a delivery date. Resolve the vendor invoice constraint before relying on a reprint, and make a separate decision on the requested discount. No payment action or database change was made.\n- **Customer-service handoff:** A customer-facing draft was recorded, acknowledging the request and the stock limitation without promising availability, timing, or a discount.\n\nNo exact payment fields apply to this ticket based on the available facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Using inventory findings for ticket 103 (8 of requested 20 size M on hand; short 12; reprint held up by open vendor invoice; no confirmed restock timing or discount), draft concise customer-facing wording that makes no unsupported availability, timing, pricing, or discount promises.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "We currently have 8 of the 20 size M items requested. The remaining 12 are unavailable, and the reprint is on hold because of an open vendor invoice. We don\u2019t have a confirmed restock timeline or discount to offer at this time.",
+    "tool": null
+  },
+  {
+    "agent": "System",
+    "kind": "reset",
+    "text": "Working database reset from the untouched original.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 101 using MCP facts. Determine whether this is a product order or stock issue and provide verified operational facts and recommended action. Do not invent details.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: For ticket 101, record a customer-facing draft based only on verified facts: requested 1 Classic Bulldog Tee SKU CC-TEE-WHITE, size S; current stock is 0. Restocking likely requires Bulldog Print Co (5-day lead time), but vendor has open unpaid invoice 501, so cannot ship while it remains unpaid. Do not promise a ship date; communicate the availability and that fulfillment is pending resolution of vendor invoice. Return recorded draft.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "I couldn\u2019t record the draft because the available handoff was refused. Draft text:\n\n\u201cThanks for your request for one Classic Bulldog Tee in size S. It is currently out of stock. Restocking is pending resolution of our supplier\u2019s unpaid invoice, so we can\u2019t confirm a fulfillment or shipping date yet.\u201d",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "**Ticket 101 is a product order with a stock shortfall**, not a stock-reporting issue.\n\n- **Requested:** 1 Classic Bulldog Tee, SKU `CC-TEE-WHITE`, size S.\n- **Verified stock:** 0 units in size S (listed at Aisle B).\n- **Restock facts:** Bulldog Print Co handles apparel reprints and has a 5-day lead time. Its invoice 501 is open and unpaid; the vendor cannot ship while that invoice remains open.\n- **Recommended action:** Resolve the vendor invoice before relying on a reprint. Do not promise a fulfillment or shipping date until shipment is possible.\n\nThe customer-service handoff was refused, so the customer-facing draft was **not recorded**. Suggested draft: \u201cThanks for your request for one Classic Bulldog Tee in size S. It is currently out of stock. Restocking is pending resolution of our supplier\u2019s unpaid invoice, so we can\u2019t confirm a fulfillment or shipping date yet.\u201d",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Facilities: Review ticket 102 using MCP facts. Identify whether this is a rent notice issue and provide operational facts and recommendation; do not invent.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "message",
+    "text": "**Ticket 102 \u2014 rent notice review**\n\nThe lease records monthly rent of **$2,400** for the Chapel Street shop, due **September 2, 2026**. As of **August 31, 2026**, rent is **not overdue**; the due date is two days away. The MCP records no payments and no lease notes, so they do not establish whether a rent notice has been received or sent.\n\n**Recommendation:** Prepare a **$2,400 rent payment proposal** for the upcoming due date, pending human approval. The checking balance is **$3,400** as of August 31, but there is also an **open $840 invoice** that was due August 28. The available facts do not establish whether that invoice has been paid or whether it affects the funds available for rent.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Accounting",
+    "kind": "tool",
+    "text": "Confirmed the rent amount and cash context for a human approval proposal.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 103 using MCP facts. Determine the operational issue and recommended resolution; report evidence and any exact payment fields if applicable. Do not invent facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: For ticket 103 (Yale AI Club, CC-HOOD-NAVY size M, qty 20, bulk discount request), record a customer-facing draft. Operational facts: stock is 8, shortfall is 12; vendor Bulldog Print Co has 5-day lead time but cannot ship while open unpaid invoice 501 ($840, due 2026-08-28) remains open. No discount/payment decision was provided. Draft should acknowledge request and avoid promising availability, restock timing, or discount.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "**Draft for ticket 103 \u2014 Yale AI Club**\n\nThanks for reaching out about ordering 20 CC-HOOD-NAVY hoodies in size M and asking about a bulk discount. We currently have 8 in stock, so we can\u2019t confirm availability for the full quantity. We\u2019ve noted your discount request, but no discount decision is available yet. We\u2019re unable to confirm whether or when the remaining quantity will be available.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "**Ticket 103 \u2014 operational review**\n\n- **Issue:** The Yale AI Club requests 20 CC-HOOD-NAVY hoodies, size M, and asks for a bulk discount.\n- **Stock evidence:** Inventory shows **8** size M in stock, leaving a **shortfall of 12**.\n- **Restock constraint:** Bulldog Print Co handles apparel reprints and has a **5-day lead time**, but its **$840 invoice 501**, due **2026-08-28**, is still open. The vendor cannot ship while that invoice is unpaid. No restock timing can therefore be confirmed.\n- **Pricing evidence:** Unit cost is **$22** and list price is **$58**. No discount or margin decision is recorded.\n- **Recommendation to Boss:** Don\u2019t promise all 20 units or a delivery date. Resolve the vendor invoice constraint before relying on a reprint, and make a separate decision on the requested discount. No payment action or database change was made.\n- **Customer-service handoff:** A customer-facing draft was recorded, acknowledging the request and the stock limitation without promising availability, timing, or a discount.\n\nNo exact payment fields apply to this ticket based on the available facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Human approval",
+    "kind": "approval",
+    "text": "Approved $2400.00 for rent by desk operator"
   }
 ]

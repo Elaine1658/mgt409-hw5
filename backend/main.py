@@ -42,7 +42,9 @@ def approve_pay(req:ApprovalRequest):
     with sqlite3.connect(DB) as db:
         now=rows('SELECT date_today FROM desk')[0]['date_today']
         db.execute('UPDATE cash_accounts SET balance=balance-? WHERE name=?',(amount,'checking'))
-        db.execute('INSERT INTO payments(kind,ref_id,amount,account,paid_at,approved_by) VALUES(?,?,?,?,?,?)',(req.kind,req.ref_id,amount,'checking',now,req.approved_by)); db.commit()
+        db.execute('INSERT INTO payments(kind,ref_id,amount,account,paid_at,approved_by) VALUES(?,?,?,?,?,?)',(req.kind,req.ref_id,amount,'checking',now,req.approved_by))
+        db.execute('UPDATE tickets SET status=? WHERE id=?', ('resolved', req.ticket_id))
+        db.commit()
     event={'ticket_id':req.ticket_id,'agent':'Human approval','kind':'approval','text':f'Approved ${amount:.2f} for {req.kind} by {req.approved_by}'}
     EVENTS.append(event); append_audit([event]); return {'ok':True,'cash':cash(),'event':event}
 @app.post('/api/reset')

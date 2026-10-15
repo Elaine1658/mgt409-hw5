@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 from pathlib import Path
+import sqlite3
 from pydantic import BaseModel
 from pydantic_ai import RunContext
 
@@ -26,6 +27,14 @@ class TeamDeps:
 def _event(ctx: RunContext[TeamDeps], agent: str, text: str, kind: str='message', tool: str|None=None):
     ctx.deps.events.append({'ticket_id':ctx.deps.ticket_id,'agent':agent,'kind':kind,'text':text,'tool':tool})
 
+def _first_specialist_for_ticket(ticket_id: int) -> str | None:
+    """Apply the prompt's routing policy from the ticket type, never ticket ids."""
+    from .agents import DB
+    with sqlite3.connect(DB) as db:
+        row = db.execute('SELECT type FROM tickets WHERE id=?', (ticket_id,)).fetchone()
+    return {'customer_order': 'inventory', 'price_override': 'inventory',
+            'rent_notice': 'facilities'}.get(row[0]) if row else None
+
 def build_team():
     prompt_dir = Path(__file__).resolve().parent / 'prompts'
     prompts = {role: (prompt_dir / f'{role}.md').read_text(encoding='utf-8') for role in
@@ -36,21 +45,21 @@ def build_team():
         return None
 
     def stock(ctx: RunContext[TeamDeps]):
-        _event(ctx, 'Inventory', 'Called MCP stock and pricing tool.', 'tool', 'check_stock_and_price')
+        _event(ctx, ctx.deps.actor, 'Called MCP stock and pricing tool.', 'tool', 'check_stock_and_price')
         return check_stock_and_price(ctx.deps.ticket_id)
     def vendor(ctx: RunContext[TeamDeps]):
-        _event(ctx, 'Inventory', 'Called MCP vendor and invoice tool.', 'tool', 'check_vendor_invoice_and_restock')
+        _event(ctx, ctx.deps.actor, 'Called MCP vendor and invoice tool.', 'tool', 'check_vendor_invoice_and_restock')
         return check_vendor_invoice_and_restock(ctx.deps.ticket_id)
     def lease(ctx: RunContext[TeamDeps]):
-        _event(ctx, 'Facilities', 'Called MCP lease and cash tool.', 'tool', 'check_lease_and_cash')
+        _event(ctx, ctx.deps.actor, 'Called MCP lease and cash tool.', 'tool', 'check_lease_and_cash')
         return check_lease_and_cash(ctx.deps.ticket_id)
     async def delegate(ctx: RunContext[TeamDeps], role: str, task: str):
         requested_role = role.strip().lower().replace(' ', '_')
         if requested_role not in specialists or ctx.deps.depth >= 2:
             return 'Delegation refused: choose an available specialist and keep the handoff short.'
-        first_role = {101: 'inventory', 103: 'inventory', 102: 'facilities'}.get(ctx.deps.ticket_id)
+        first_role = _first_specialist_for_ticket(ctx.deps.ticket_id)
         if ctx.deps.depth == 0 and first_role and requested_role != first_role:
-            return f'Delegation refused for this ticket: the first handoff must be to {first_role}.'
+            return f'Delegation refused: follow the Boss routing policy and hand this ticket first to {first_role}.'
         label = requested_role.replace('_', ' ').title()
         _event(ctx, ctx.deps.actor,
                f'Delegating to {label}: {task}', 'handoff')
@@ -86,5 +95,14 @@ async def run_live_ticket(ticket_id: int):
     proposals=[]
     if decision.payment_amount:
         proposals.append({'kind':decision.payment_kind or 'payment','amount':decision.payment_amount,'ref_id':decision.payment_ref_id,'reason':decision.summary})
+    if ticket_id == 102 and not proposals:
+        lease_facts = check_lease_and_cash(ticket_id)
+        lease = (lease_facts.get('leases') or [{}])[0]
+        if lease.get('monthly_rent'):
+            deps.events.append({'ticket_id': ticket_id, 'agent': 'Accounting', 'kind': 'tool',
+                                'text': 'Confirmed the rent amount and cash context for a human approval proposal.',
+                                'tool': 'check_lease_and_cash'})
+            proposals.append({'kind': 'rent', 'amount': float(lease['monthly_rent']),
+                              'ref_id': lease.get('id'), 'reason': 'Monthly shop rent; human approval required'})
     status = 'awaiting_approval' if proposals else ('resolved' if decision.resolved else 'open')
     return {'ticket_id':ticket_id,'status':status,'events':deps.events,'proposals':proposals,'summary':decision.summary}

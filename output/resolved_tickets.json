@@ -1,16 +1,16 @@
 {
-  "run": "clean baseline",
+  "run": "clean live Portkey run with human approval",
   "tickets": [
     {
       "ticket_id": 101,
-      "status": "resolved",
-      "summary": "Resolved by Boss with one specialist handoff; 5 events recorded.",
+      "status": "open",
+      "summary": "Live Boss → Inventory → Customer Service run; size-S tee is unavailable and the open vendor invoice blocks restock.",
       "proposals": []
     },
     {
       "ticket_id": 102,
-      "status": "awaiting_approval",
-      "summary": "Resolved by Boss with one specialist handoff; 4 events recorded.",
+      "status": "resolved",
+      "summary": "Live Boss → Facilities run; $2,400 rent proposal was approved by a human operator.",
       "proposals": [
         {
           "kind": "rent",
@@ -22,10 +22,16 @@
     },
     {
       "ticket_id": 103,
-      "status": "resolved",
-      "summary": "Resolved by Boss with one specialist handoff; 6 events recorded.",
+      "status": "open",
+      "summary": "Live Boss → Inventory → Customer Service run; only 8 of 20 hoodies are available and no discount was approved.",
       "proposals": []
     }
   ],
-  "ending_checking_balance": 3400.0
+  "approval": {
+    "ticket_id": 102,
+    "approved_by": "desk operator",
+    "amount": 2400.0,
+    "payment_kind": "rent"
+  },
+  "ending_checking_balance": 1000.0
 }
