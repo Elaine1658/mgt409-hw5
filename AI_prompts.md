@@ -20,7 +20,7 @@ Please add this local MCP server to the project configuration in `.mcp.json`. Th
 
 ## Problem 5: Build the agent team and grow the MCP tools
 
-Please build five connected roles under `backend/`: Boss, Inventory, Accounting, Facilities, and Customer Service. Give each role its own prompt file and shared Pydantic models. Boss should choose the first specialist, specialists should be able to hand off follow-up work, and all shop facts should come from MCP data. Include the date/overdue rule, the unpaid-invoice shipping rule, human approval for payments, no negative balances, and drafts instead of real messages.
+Please build five connected roles under `backend/` as real `pydantic_ai.Agent` objects: Boss, Inventory, Accounting, Facilities, and Customer Service. Give each role its own prompt file and shared Pydantic models. Use only `gpt-6-luna` through Portkey when live mode is enabled, while keeping the local fallback separate for runs without a key. Boss should choose the first specialist, specialists should be able to hand off follow-up work, and all shop facts should come from MCP data. Include the date/overdue rule, the unpaid-invoice shipping rule, human approval for payments, no negative balances, and drafts instead of real messages.
 
 ## Problem 6: Plan the three tickets
 

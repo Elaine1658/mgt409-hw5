@@ -2,12 +2,18 @@ from pathlib import Path
 import sqlite3, json
 from mcp_server.server import check_stock_and_price, check_vendor_invoice_and_restock, check_lease_and_cash
 from .ai_config import MODEL_NAME
+from .pydantic_team import run_live_ticket
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / "data" / "campus_customs_new.db"
 PROMPTS = ROOT / "backend" / "prompts"
 
 def run_ticket(ticket_id: int):
+    live_result = run_live_ticket(ticket_id)
+    if live_result is not None:
+        with sqlite3.connect(DB) as db:
+            db.execute("UPDATE tickets SET status=? WHERE id=?", (live_result['status'], ticket_id)); db.commit()
+        return live_result
     with sqlite3.connect(DB) as db:
         db.row_factory = sqlite3.Row
         t = dict(db.execute("SELECT * FROM tickets WHERE id=?", (ticket_id,)).fetchone())

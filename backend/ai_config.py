@@ -4,7 +4,7 @@ import os
 MODEL_NAME = "gpt-6-luna"
 PORTKEY_BASE_URL = os.getenv("PORTKEY_BASE_URL", "https://api.portkey.ai/v1")
 
-def make_pydantic_agent(system_prompt: str):
+def make_pydantic_agent(system_prompt: str, *, name: str | None = None, output_type=str, deps_type=object):
     """Build a PydanticAI agent when credentials are available.
 
     The operational demo keeps a deterministic local path for grading and for
@@ -23,4 +23,4 @@ def make_pydantic_agent(system_prompt: str):
         return None
     provider = OpenAIProvider(base_url=PORTKEY_BASE_URL, api_key=token)
     model = OpenAIChatModel(MODEL_NAME, provider=provider)
-    return Agent(model, system_prompt=system_prompt)
+    return Agent(model, name=name, output_type=output_type, deps_type=deps_type, system_prompt=system_prompt)
