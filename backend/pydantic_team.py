@@ -17,12 +17,20 @@ class BossDecision(BaseModel):
     payment_kind: str | None = None
     payment_ref_id: int | None = None
 
+class SpecialistDecision(BaseModel):
+    summary: str
+    resolved: bool = False
+    payment_amount: float | None = None
+    payment_kind: str | None = None
+    payment_ref_id: int | None = None
+
 @dataclass
 class TeamDeps:
     ticket_id: int
     events: list[dict[str, Any]] = field(default_factory=list)
     depth: int = 0
     actor: str = 'Boss'
+    payment_fields: dict[str, Any] = field(default_factory=dict)
 
 def _event(ctx: RunContext[TeamDeps], agent: str, text: str, kind: str='message', tool: str|None=None):
     ctx.deps.events.append({'ticket_id':ctx.deps.ticket_id,'agent':agent,'kind':kind,'text':text,'tool':tool})
@@ -40,7 +48,7 @@ def build_team():
     prompts = {role: (prompt_dir / f'{role}.md').read_text(encoding='utf-8') for role in
                ('boss', 'inventory', 'accounting', 'facilities', 'customer_service')}
     boss = make_pydantic_agent(prompts['boss'], name='boss', output_type=BossDecision, deps_type=TeamDeps)
-    specialists = {role: make_pydantic_agent(prompt, name=role, deps_type=TeamDeps) for role, prompt in prompts.items() if role != 'boss'}
+    specialists = {role: make_pydantic_agent(prompt, name=role, output_type=SpecialistDecision, deps_type=TeamDeps) for role, prompt in prompts.items() if role != 'boss'}
     if boss is None or any(x is None for x in specialists.values()):
         return None
 
@@ -65,8 +73,16 @@ def build_team():
                f'Delegating to {label}: {task}', 'handoff')
         child = TeamDeps(ctx.deps.ticket_id, ctx.deps.events, ctx.deps.depth + 1, label)
         result = await specialists[requested_role].run(task, deps=child)
+        specialist_output = result.output
+        if isinstance(specialist_output, SpecialistDecision) and specialist_output.payment_amount:
+            ctx.deps.payment_fields = {
+                'amount': specialist_output.payment_amount,
+                'kind': specialist_output.payment_kind or 'payment',
+                'ref_id': specialist_output.payment_ref_id,
+                'reason': specialist_output.summary,
+            }
         _event(ctx, label, str(result.output))
-        return result.output
+        return specialist_output
 
     # Keep the Boss's action surface narrow so a live run must show a real
     # Boss -> specialist handoff instead of letting Boss do all MCP work.
@@ -95,14 +111,8 @@ async def run_live_ticket(ticket_id: int):
     proposals=[]
     if decision.payment_amount:
         proposals.append({'kind':decision.payment_kind or 'payment','amount':decision.payment_amount,'ref_id':decision.payment_ref_id,'reason':decision.summary})
-    if ticket_id == 102 and not proposals:
-        lease_facts = check_lease_and_cash(ticket_id)
-        lease = (lease_facts.get('leases') or [{}])[0]
-        if lease.get('monthly_rent'):
-            deps.events.append({'ticket_id': ticket_id, 'agent': 'Accounting', 'kind': 'tool',
-                                'text': 'Confirmed the rent amount and cash context for a human approval proposal.',
-                                'tool': 'check_lease_and_cash'})
-            proposals.append({'kind': 'rent', 'amount': float(lease['monthly_rent']),
-                              'ref_id': lease.get('id'), 'reason': 'Monthly shop rent; human approval required'})
+    elif deps.payment_fields:
+        proposals.append({'kind': deps.payment_fields['kind'], 'amount': deps.payment_fields['amount'],
+                          'ref_id': deps.payment_fields['ref_id'], 'reason': deps.payment_fields['reason']})
     status = 'awaiting_approval' if proposals else ('resolved' if decision.resolved else 'open')
     return {'ticket_id':ticket_id,'status':status,'events':deps.events,'proposals':proposals,'summary':decision.summary}
