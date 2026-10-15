@@ -103,5 +103,116 @@
     "kind": "message",
     "text": "List price is $58.00; margin review is required before any discount.",
     "tool": null
+  },
+  {
+    "agent": "System",
+    "kind": "reset",
+    "text": "Working database reset from the untouched original.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "I am reviewing ticket 101: Bulldog tee.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating stock and price checking to Inventory.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Checked requested SKU and size against current stock and pricing.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "There is a shortfall of 1; checked vendors and unpaid invoices.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Restock is blocked by an open unpaid vendor invoice.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "I am reviewing ticket 102: Rent due.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating lease timing to Facilities.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "tool",
+    "text": "Checked the lease, shop date, cash and payment history.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "message",
+    "text": "Rent of $2400.00 is due 2026-09-02; I prepared a human approval request.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "I am reviewing ticket 103: Bulk hoodie discount.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating stock and price checking to Inventory.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Checked requested SKU and size against current stock and pricing.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "There is a shortfall of 12; checked vendors and unpaid invoices.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Restock is blocked by an open unpaid vendor invoice.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Accounting",
+    "kind": "message",
+    "text": "List price is $58.00; margin review is required before any discount.",
+    "tool": null
   }
 ]

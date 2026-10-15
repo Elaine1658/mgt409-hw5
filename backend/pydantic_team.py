@@ -1,6 +1,7 @@
 """The live PydanticAI team used when LIVE_AI=true and a Portkey key exists."""
 from dataclasses import dataclass, field
 from typing import Any
+from pathlib import Path
 from pydantic import BaseModel
 from pydantic_ai import RunContext
 
@@ -25,13 +26,9 @@ def _event(ctx: RunContext[TeamDeps], agent: str, text: str, kind: str='message'
     ctx.deps.events.append({'ticket_id':ctx.deps.ticket_id,'agent':agent,'kind':kind,'text':text,'tool':tool})
 
 def build_team():
-    prompts = {
-        'boss': 'You are Boss. Review the ticket, use MCP tools, delegate to one specialist, and make a final decision. Never invent shop facts. Payments are only proposals for human approval.',
-        'inventory': 'You are Inventory. Check SKU, size, stock, vendor lead time, and unpaid invoices through MCP. Never contact vendors or change the database.',
-        'accounting': 'You are Accounting. Check cash, invoices, costs, and margins through MCP. Prepare payment proposals only; a human must approve payments and cash cannot go negative.',
-        'facilities': 'You are Facilities. Check leases and due dates through MCP. Prepare rent recommendations but never pay or contact the landlord.',
-        'customer_service': 'You are Customer Service. Draft a polite customer response from MCP-backed facts. Never send email or promise unsupported facts.',
-    }
+    prompt_dir = Path(__file__).resolve().parent / 'prompts'
+    prompts = {role: (prompt_dir / f'{role}.md').read_text(encoding='utf-8') for role in
+               ('boss', 'inventory', 'accounting', 'facilities', 'customer_service')}
     boss = make_pydantic_agent(prompts['boss'], name='boss', output_type=BossDecision, deps_type=TeamDeps)
     specialists = {role: make_pydantic_agent(prompt, name=role, deps_type=TeamDeps) for role, prompt in prompts.items() if role != 'boss'}
     if boss is None or any(x is None for x in specialists.values()):

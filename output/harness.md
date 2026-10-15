@@ -15,3 +15,13 @@ The working database is `data/campus_customs_new.db`; the original is kept untou
 | `invoices` | `id`, `vendor_id`, `amount`, `due_date`, `status`, `description` | Open unpaid vendor invoice can block shipment. |
 
 The three open tickets connect as follows: 101 uses SKU `CC-TEE-WHITE`, size S, and invoice 501; 102 uses lease 1; 103 uses SKU `CC-HOOD-NAVY`, size M, quantity 20 and pricing. Three MCP tools are tested in `mcp_smoke.json`. The API keeps payments behind `/api/approve-pay` and rejects insufficient cash.
+
+## MCP tool-to-ticket harness map
+
+| Tool | Tables read | Ticket unlocked | Why this specific tool is needed |
+|---|---|---|---|
+| `check_stock_and_price(ticket_id)` | `tickets`, `inventory`, `pricing` | 101 and 103 | Confirms requested SKU/size quantity and gives the price or cost needed for an order or discount decision. |
+| `check_vendor_invoice_and_restock(ticket_id)` | `tickets`, `vendors`, `invoices`, `pricing` | 101 and 103 | Finds a vendor lead time and checks the rule that an open unpaid invoice blocks shipment. |
+| `check_lease_and_cash(ticket_id)` | `desk`, `leases`, `cash_accounts`, `payments`, `invoices` | 102 | Compares rent timing with `desk.date_today` and provides the cash/payment context for a human approval proposal. |
+
+The committed `output/mcp_client_smoke.py` performs protocol-level `initialize`, `list_tools`, and `call_tool` checks; its output is saved in `mcp_smoke.json`.

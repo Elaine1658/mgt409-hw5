@@ -1,5 +1,17 @@
 [
-  {"prompt":"Check the tee stock and price for ticket 101","tool":"check_stock_and_price","short_output":"CC-TEE-WHITE size S has 0 units; list price is 28.0."},
-  {"prompt":"Check vendor restock constraints for ticket 101","tool":"check_vendor_invoice_and_restock","short_output":"Bulldog Print Co has 5-day lead time; invoice 501 is still open."},
-  {"prompt":"Check rent and cash for ticket 102","tool":"check_lease_and_cash","short_output":"Rent is 2400.0 due 2026-09-02; checking balance is 3400.0."}
+  {
+    "prompt": "Check the tee stock and price for ticket 101",
+    "tool": "check_stock_and_price",
+    "short_output": "{\n  \"ticket_id\": 101,\n  \"ticket\": {\n    \"id\": 101,\n    \"type\": \"customer_order\",\n    \"requester\": \"Tauhid Zaman\",\n    \"subject\": \"Bulldog tee\",\n    \"sku\": \"CC-TEE-WHITE\",\n    \"size\": \"S\",\n    \"qty\": 1,\n    \"lease_id\": null,\n    \"invoice_id\": 501,\n    \"status\": \"resolved\",\n    \"notes\": \"Needs a tee in size S.\",\n    \"created_at\": \"2026-08-31T09:15:00-04:00\"\n  },\n  \"inventory\": [\n    {\n      \"sku\": \"CC-TEE-WHITE\",\n      \"name\": \"Classic Bulldog Tee\",\n      \"size\": \"S\",\n      \"qty\": 0,\n      \"locati"
+  },
+  {
+    "prompt": "Check vendor restock constraints for ticket 101",
+    "tool": "check_vendor_invoice_and_restock",
+    "short_output": "{\n  \"ticket_id\": 101,\n  \"ticket\": {\n    \"id\": 101,\n    \"type\": \"customer_order\",\n    \"requester\": \"Tauhid Zaman\",\n    \"subject\": \"Bulldog tee\",\n    \"sku\": \"CC-TEE-WHITE\",\n    \"size\": \"S\",\n    \"qty\": 1,\n    \"lease_id\": null,\n    \"invoice_id\": 501,\n    \"status\": \"resolved\",\n    \"notes\": \"Needs a tee in size S.\",\n    \"created_at\": \"2026-08-31T09:15:00-04:00\"\n  },\n  \"vendors\": [\n    {\n      \"id\": 1,\n      \"name\": \"Bulldog Print Co\",\n      \"specialty\": \"apparel reprint\",\n      \"lead_days\": 5\n    },\n "
+  },
+  {
+    "prompt": "Check rent and cash for ticket 102",
+    "tool": "check_lease_and_cash",
+    "short_output": "{\n  \"ticket_id\": 102,\n  \"today\": \"2026-08-31\",\n  \"leases\": [\n    {\n      \"id\": 1,\n      \"space_name\": \"Chapel Street shop\",\n      \"landlord\": \"Elm City Properties\",\n      \"monthly_rent\": 2400.0,\n      \"next_due\": \"2026-09-02\",\n      \"notes\": null\n    }\n  ],\n  \"cash\": [\n    {\n      \"name\": \"checking\",\n      \"balance\": 3400.0,\n      \"date\": \"2026-08-31\"\n    }\n  ],\n  \"payments\": [],\n  \"invoices\": [\n    {\n      \"id\": 501,\n      \"vendor_id\": 1,\n      \"amount\": 840.0,\n      \"due_date\": \"2026-08-28\",\n "
+  }
 ]
