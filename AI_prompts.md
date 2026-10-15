@@ -42,6 +42,8 @@ Please build the React + Vite + TypeScript dashboard in `frontend/`. It should s
 
 Please reset `data/campus_customs_new.db`, record the starting checking balance, and run tickets 101, 102, and 103. Fill the Actual sections with the agents, handoffs, and tools from the run. Then complete the Cash tab, `output/resolved_tickets.json`, `output/resolved_board.html`, and `output/audit_trail.json`.
 
+**Follow-up:** 可以，你帮我做吧 (after asking for the minimum fix: run the three tickets on the React board, screenshot each one, and put the screenshots into `resolved_board.html`). The first version of `resolved_board.html` only had text and no board screenshots.
+
 ## Problem 10: Reflection
 
 Please finish the Reflection tab in `output/desk_tickets.html`. Discuss ticket 101, 102, and 103 separately, compare Actual with Expected, explain what would be simpler with one agent and why, and give three new problems this team can solve plus three it cannot solve with the current tools.

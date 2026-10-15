@@ -769,5 +769,192 @@
     "agent": "Human approval",
     "kind": "approval",
     "text": "Approved $2400.00 for rent by desk operator"
+  },
+  {
+    "agent": "System",
+    "kind": "reset",
+    "text": "Working database reset from the untouched original.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 101 using MCP facts. Determine whether this is a product order or stock issue and provide verified operational facts and recommended action. Do not invent details.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Record a customer-facing draft for ticket 101 based strictly on verified facts: customer needs 1 Classic Bulldog Tee SKU CC-TEE-WHITE size S; current stock is 0; potential reprint vendor Bulldog Print Co has 5-day lead time but cannot ship while open unpaid invoice 501 ($840, due 2026-08-28) remains open. Draft should avoid promising fulfillment/date and explain we are checking restocking options.",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "summary='Draft for ticket 101: \u201cThanks for your interest in one Classic Bulldog Tee (SKU CC-TEE-WHITE), size S. This size is currently out of stock. We\u2019re checking restocking options. A potential reprint option is with Bulldog Print Co, but they cannot ship while an open unpaid invoice remains outstanding, so we can\u2019t confirm availability or a fulfillment date at this time. We\u2019ll share an update when we have more information.\u201d' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
+  },
+  {
+    "ticket_id": 101,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "summary='Ticket 101 is a customer product order, not a stock-only issue: it requests 1 Classic Bulldog Tee (SKU CC-TEE-WHITE), size S. Verified stock is 0, so the order cannot be fulfilled from current inventory. Bulldog Print Co is the relevant apparel reprint vendor with a 5-day lead time, but vendor records show open invoice 501 for $840, due 2026-08-28; the vendor cannot ship while that invoice remains unpaid. Recommendation: do not promise a fulfillment date. Resolve the invoice blocker through the appropriate internal process before relying on a reprint, then confirm availability and timing. Customer-facing draft has been recorded with customer_service.' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Facilities: Review ticket 102 using MCP facts. Identify whether this is a rent notice issue and provide operational facts and recommendation; do not invent.",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "tool",
+    "text": "Called MCP lease and cash tool.",
+    "tool": "check_lease_and_cash"
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Facilities",
+    "kind": "message",
+    "text": "summary='Ticket 102 is a rent notice issue. MCP facts: Chapel Street shop lease (ID 1), monthly rent $2,400, next due September 2, 2026; desk date is August 31, 2026, so rent is upcoming, not yet due or overdue. Checking balance is $3,400 as of August 31; no rent payments are listed. Recommendation: prepare the monthly rent payment proposal now for the upcoming due date, subject to human approval. No accounting review is indicated by the available facts. A separate open invoice (ID 501) for $840 was due August 28; it is not the lease rent notice.' resolved=False payment_amount=2400.0 payment_kind='rent' payment_ref_id=1",
+    "tool": null
+  },
+  {
+    "ticket_id": 102,
+    "agent": "Human approval",
+    "kind": "approval",
+    "text": "Approved $2400.00 for rent by desk operator"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 103 using MCP facts. Determine the operational issue and recommended resolution; report evidence and any exact payment fields if applicable. Do not invent facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Ticket 103 operational facts: Yale AI Club requests 20 CC-HOOD-NAVY size M; current stock 8, shortfall 12. List price $58, unit cost $22. Bulldog Print Co apparel reprint lead time 5 days, but vendor 1 has open unpaid invoice #501 for $840 (due 2026-08-28), so cannot ship while unpaid. Please record a customer-facing draft explaining stock availability/shortfall and proposed restock timing subject to vendor invoice clearance; do not promise discount, shipment, or payment.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "summary='Draft for ticket 103: \u201cHello Yale AI Club, We currently have 8 of the 20 CC-HOOD-NAVY hoodies in size M available, leaving 12 units short. The list price is $58 per unit. A reprint typically takes 5 days, but that timing is subject to Bulldog Print Co being able to proceed. The vendor currently has an unpaid $840 invoice (#501, due 2026-08-28) and cannot ship while it remains unpaid, so we can\u2019t confirm a restock or shipment date at this time. We\u2019ll be able to provide an update once the vendor\u2019s status is cleared. Thank you for your understanding.\u201d' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "summary='Ticket 103 is a bulk-discount request for 20 CC-HOOD-NAVY hoodies, size M. Inventory shows 8 available, so the shortfall is 12. Pricing facts: $58 list price and $22 unit cost; the ticket provides no approved discount or margin decision, so no discount should be promised. Bulldog Print Co is the apparel reprint vendor with a 5-day lead time, but it cannot ship while its open unpaid invoice #501 for $840 (due 2026-08-28) remains unpaid. Recommend advising the requester that 8 units are available and the remaining 12 require restock, with timing only estimable as 5 days after the vendor can proceed and subject to invoice clearance. No payment is applicable or authorized from this ticket; payment fields are null. Customer-facing draft has been recorded.' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "message",
+    "text": "Live PydanticAI Boss run started.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Boss",
+    "kind": "handoff",
+    "text": "Delegating to Inventory: Review ticket 103 using MCP facts. Determine the operational issue and recommended resolution; report evidence and any exact payment fields if applicable. Do not invent facts.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP stock and pricing tool.",
+    "tool": "check_stock_and_price"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "tool",
+    "text": "Called MCP vendor and invoice tool.",
+    "tool": "check_vendor_invoice_and_restock"
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "handoff",
+    "text": "Delegating to Customer Service: Ticket 103 operational facts: Yale AI Club requests 20 CC-HOOD-NAVY size M; current stock 8, shortfall 12. List price $58, unit cost $22. Bulldog Print Co apparel reprint lead time 5 days, but vendor 1 has open unpaid invoice #501 for $840 (due 2026-08-28), so cannot ship while unpaid. Please record a customer-facing draft explaining stock availability/shortfall and proposed restock timing subject to vendor invoice clearance; do not promise discount, shipment, or payment.",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Customer Service",
+    "kind": "message",
+    "text": "summary='Draft for ticket 103: \u201cHello Yale AI Club, We currently have 8 of the 20 CC-HOOD-NAVY hoodies in size M available, leaving 12 units short. The list price is $58 per unit. A reprint typically takes 5 days, but that timing is subject to Bulldog Print Co being able to proceed. The vendor currently has an unpaid $840 invoice (#501, due 2026-08-28) and cannot ship while it remains unpaid, so we can\u2019t confirm a restock or shipment date at this time. We\u2019ll be able to provide an update once the vendor\u2019s status is cleared. Thank you for your understanding.\u201d' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
+  },
+  {
+    "ticket_id": 103,
+    "agent": "Inventory",
+    "kind": "message",
+    "text": "summary='Ticket 103 is a bulk-discount request for 20 CC-HOOD-NAVY hoodies, size M. Inventory shows 8 available, so the shortfall is 12. Pricing facts: $58 list price and $22 unit cost; the ticket provides no approved discount or margin decision, so no discount should be promised. Bulldog Print Co is the apparel reprint vendor with a 5-day lead time, but it cannot ship while its open unpaid invoice #501 for $840 (due 2026-08-28) remains unpaid. Recommend advising the requester that 8 units are available and the remaining 12 require restock, with timing only estimable as 5 days after the vendor can proceed and subject to invoice clearance. No payment is applicable or authorized from this ticket; payment fields are null. Customer-facing draft has been recorded.' resolved=False payment_amount=None payment_kind=None payment_ref_id=None",
+    "tool": null
   }
 ]
